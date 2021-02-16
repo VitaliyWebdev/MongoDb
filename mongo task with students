@@ -93,10 +93,32 @@ db.getCollection('students').update(
 )
 15) Вигнати дітей, які мають середній бал менше ніж 2.5
 
-
+db.getCollection('students').deleteMany({
+    avgScore:{$lte:2.5}
+    })
+    
 16) Дітям, батьки яких працюють в освіті ( teacher ) поставити 5;
 
 
 
 17) Знайти дітей які вчаться в початковій школі (до 5 класу) і вивчають фізику ( physics )
+db.getCollection('students').find({
+    $and:[{class:{$lte:5}},{"lessons":"physics"}]
+    })
+
 18) Знайти найуспішніший клас
+db.getCollection('students').aggregate([{
+    $group: {
+            _id: "$class", 
+            TheBestRating:{$sum:"$avgScore"}        
+        }
+    },
+    {
+        $sort:{TheBestRating:-1}
+        },
+        {
+            $limit:1
+            }  
+    ])
+
+
